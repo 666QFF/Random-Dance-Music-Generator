@@ -38,7 +38,7 @@
 | .NET 运行时 | .NET 8.0 Desktop Runtime |
 | FFmpeg | 内置在程序 `assets` 目录中，无需手动安装 |
 | 网络 | B站下载需要联网 |
-| 资源文件 | `assets/Countdown.mp3` 和 `assets/5秒倒计时.mp4` |
+| 资源文件 | `assets/5秒音频频计时.mp3` 和 `assets/5秒视频倒计时.mp4` |
 
 ---
 
