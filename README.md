@@ -130,6 +130,7 @@
 | BV号 | B站视频BV号 | `BV1xx411c7mD` |
 | 开始时间 | 剪辑起始时间（秒） | `00:00:10` |
 | 结束时间 | 剪辑截止时间（秒），留空表示播放到结尾 | `00:01:02` |
+<img width="664" height="134" alt="示例图2" src="https://github.com/user-attachments/assets/563866e3-0063-43fb-becb-67a97edc624b" />
 
 
 **示例歌单文件 `songlist.csv`：**
