@@ -45,9 +45,9 @@
 
 ## 界面概览
 
-```
+
 ![image](https://raw.githubusercontent.com/666QFF/Random-Dance-Music-Generator/refs/heads/main/%E7%A4%BA%E4%BE%8B%E5%9B%BE1.png)
-```
+
 
 ---
 
