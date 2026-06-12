@@ -46,8 +46,7 @@
 ## 界面概览
 
 ```
-示例图1.png
-
+[示例图1.png](https://github.com/666QFF/Random-Dance-Music-Generator/blob/770f3ce4f19e1cf9c2f81ac705b45d790520d683/%E7%A4%BA%E4%BE%8B%E5%9B%BE1.png)
 
 ```
 
