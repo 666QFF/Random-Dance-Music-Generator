@@ -46,7 +46,7 @@
 ## 界面概览
 
 ```
-<img width="664" height="134" alt="示例图2" src="https://github.com/user-attachments/assets/d44db90c-44bd-4e42-bc52-b089d185a25a" />
+示例图1.png
 
 
 ```
