@@ -96,13 +96,10 @@
 
 ### 歌单文件格式（xlsx）
 
-歌单为 xlsx 格式（逗号分隔）
 <img width="664" height="134" alt="示例图2" src="https://github.com/user-attachments/assets/563866e3-0063-43fb-becb-67a97edc624b" />
 
 
-
-
-> 结束时间留空则播放整首歌（从起始时间到结尾）。
+> 时间留空则播放整首歌（从起始时间到结尾）。
 
 ### 加载歌单
 
