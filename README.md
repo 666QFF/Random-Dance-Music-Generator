@@ -94,28 +94,19 @@
 
 ## 歌单管理
 
-### 歌单文件格式（CSV）
+### 歌单文件格式（xlsx）
 
-歌单为 xlsx 格式（逗号分隔），编码为 **UTF-8**，包含以下列：
-
+歌单为 xlsx 格式（逗号分隔）
 <img width="664" height="134" alt="示例图2" src="https://github.com/user-attachments/assets/563866e3-0063-43fb-becb-67a97edc624b" />
 
 
-**示例歌单文件 `songlist.csv`：**
 
-```csv
-曲名,BV号,开始时间,结束时间
-Drama,BV1xx411c7mD,35.5,65.0
-Supernova,BV1abc123456,10.0,40.0
-How Sweet,BV1def789012,0,30.0
-Magnetic,BV1ghi345678,60.0,
-```
 
 > 结束时间留空则播放整首歌（从起始时间到结尾）。
 
 ### 加载歌单
 
-1. 点击「浏览」选择歌单 CSV 文件
+1. 点击「浏览」选择歌单 xlsx 文件
 2. 软件自动读取并显示在下方表格中
 3. 表格显示：**曲名**、**剪辑时间**、**BV号**
 4. 点击「重新加载」可刷新歌单内容
