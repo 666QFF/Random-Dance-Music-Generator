@@ -45,10 +45,10 @@ features:
 
 发布版已做**代码混淆**（符号重命名 + 字符串加密 + 控制流混淆），大幅提升反编译难度。
 
-- 💾 [下载混淆版（v3.8.0 · 自包含 · 解压即用）](https://github.com/666QFF/Random-Dance-Music-Generator/releases/latest/download/RandomDanceGen-obfuscated.zip)
+- 💾 [下载· 自包含 · 解压即用）](https://github.com/666QFF/Random-Dance-Music-Generator/releases/latest/download/RandomDanceGen-obfuscated.zip)
 - 解压后得到 `随机舞蹈音频视频生成器.exe` + 运行库 + `assets\`，双击 exe 即可运行，**无需安装 .NET**。
 
-::: warning 混淆 ≠ 免费使用
+::: warning 混淆
 混淆只是提高逆向门槛，软件启动与每次生成前仍会向服务器校验本机授权状态，被停用的设备会被拒绝。请勿传播绕过校验的版本。
 :::
 
