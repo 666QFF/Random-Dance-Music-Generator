@@ -21,7 +21,7 @@
 
 ### 下载与首次运行
 
-下载**混淆版**：💾 [RandomDanceGen.zip](https://github.com/666QFF/Random-Dance-Music-Generator/releases)
+下载**混淆版**：💾 [RandomDanceGen.zip](https://github.com/666QFF/RandomDanceGenerator/releases)
 
 解压后双击 `随机舞蹈音频视频生成器.exe` 即可（自包含，无需安装 .NET）。
 
