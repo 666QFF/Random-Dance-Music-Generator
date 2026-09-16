@@ -14,7 +14,7 @@ hero:
       link: /reference/faq
     - theme: alt
       text: 源码仓库
-      link: https://github.com/666QFF/Random-Dance-Music-Generator
+      link: https://github.com/666QFF/RandomDanceGenerator
 
 features:
   - icon: 📥
@@ -45,7 +45,7 @@ features:
 
 发布版已做**代码混淆**
 
-- 💾 [下载 · 解压即用] (https://github.com/666QFF/Random-Dance-Music-Generator/releases)
+- 💾 [下载 · 解压即用] (https://github.com/666QFF/RandomDanceGenerator/releases)
 - 解压后得到 `随机舞蹈音频视频生成器.exe` + `assets\`，双击 exe 即可运行，**无需安装 .NET**。
 
 ::: warning 混淆
