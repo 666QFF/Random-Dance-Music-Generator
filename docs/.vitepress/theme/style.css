@@ -1,0 +1,732 @@
+/**
+ * RandomDanceGen 文档站视觉主题 · 极光（Aurora）风
+ * ---------------------------------------------------------------------------
+ * 约定与客户端一致：颜色 / 圆角 / 阴影集中在变量区，改主题只动「1. 设计变量」。
+ *
+ * 目录
+ *   1. 设计变量（浅色）
+ *   2. 极光背景层
+ *   3. 导航栏 / 侧边栏 / 移动端局部导航
+ *   4. 首页 Hero + 按钮
+ *   5. 首页「光晕图标」
+ *   6. 首页功能卡片
+ *   7. 文档页可读性
+ *   8. 页脚 / 滚动条 / 选区
+ *   9. 深色模式
+ *  10. 无障碍与动效降级
+ *
+ * 注意：VitePress 组件样式带 scoped 属性（形如 .VPFeature[data-v-x]），
+ *      因此本文件里的选择器都主动多写一层父级来保证覆盖生效。
+ */
+
+/* ==========================================================================
+   1. 设计变量（浅色）
+   ========================================================================== */
+:root {
+  /* --- 品牌色：青绿（teal → emerald） --- */
+  --vp-c-brand-1: #14b8a6;
+  --vp-c-brand-2: #0d9488;
+  --vp-c-brand-3: #0f766e;
+  --vp-c-brand-soft: rgba(20, 184, 166, 0.14);
+
+  /* --- 底色（极光最终沉淀的颜色） --- */
+  --rdg-base: #f7fcfb;
+  --rdg-veil-rgb: 255, 255, 255; /* 白纱，压住极光保证正文可读 */
+
+  /* --- 极光六色（青绿色系：薄荷 / 青蓝 / 翠绿 / 湖青 / 浅翠 / 亮青） --- */
+  --rdg-aurora-1: #99f6e4;
+  --rdg-aurora-2: #7dd3fc;
+  --rdg-aurora-3: #6ee7b7;
+  --rdg-aurora-4: #5eead4;
+  --rdg-aurora-5: #a7f3d0;
+  --rdg-aurora-6: #2dd4bf;
+  --rdg-aurora-opacity: 0.84;
+  --rdg-aurora-blur: 76px;
+  --rdg-aurora-saturate: 165%;
+
+  /* --- 玻璃拟态（卡片 / 按钮 / 导航） --- */
+  --rdg-glass: rgba(255, 255, 255, 0.62);
+  --rdg-glass-strong: rgba(255, 255, 255, 0.84);
+  --rdg-glass-border: rgba(255, 255, 255, 0.78);
+  --rdg-glass-blur: blur(16px) saturate(150%);
+
+  /* --- 圆角 --- */
+  --rdg-radius-lg: 20px;
+  --rdg-radius-md: 14px;
+  --rdg-radius-pill: 999px;
+
+  /* --- 阴影 --- */
+  --rdg-shadow-card: 0 14px 34px -20px rgba(15, 118, 110, 0.38), 0 2px 6px -2px rgba(15, 118, 110, 0.08);
+  --rdg-shadow-card-hover: 0 26px 52px -22px rgba(20, 184, 166, 0.5), 0 4px 12px -4px rgba(52, 211, 153, 0.18);
+  --rdg-shadow-brand: 0 10px 24px -12px rgba(20, 184, 166, 0.8);
+
+  /* --- 渐变 --- */
+  --rdg-grad-brand: linear-gradient(120deg, #14b8a6 0%, #2dd4bf 42%, #34d399 100%);
+  --rdg-grad-title: linear-gradient(118deg, #0f766e 0%, #14b8a6 30%, #2dd4bf 68%, #34d399 104%);
+  --rdg-grad-sub: linear-gradient(118deg, #14b8a6 0%, #5eead4 52%, #34d399 100%);
+  --rdg-hairline: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.18), transparent);
+
+  /* --- 覆盖 VitePress 内置变量：底色 + 半透明导航/侧栏 --- */
+  --vp-c-bg: #fafdfc;
+  --vp-c-bg-alt: #f1faf7;
+  --vp-c-bg-soft: #edf7f4;
+  --vp-nav-bg-color: rgba(247, 252, 251, 0.72);
+  --vp-local-nav-bg-color: rgba(247, 252, 251, 0.78);
+  --vp-sidebar-bg-color: rgba(240, 250, 247, 0.58);
+
+  /* --- Hero 渐变大标题（VitePress 官方钩子，无需重写选择器） --- */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: var(--rdg-grad-title);
+  --vp-home-hero-image-background-image: none;
+  --vp-home-hero-image-filter: none;
+}
+
+html {
+  background-color: var(--rdg-base);
+  scrollbar-color: rgba(20, 184, 166, 0.32) transparent;
+  scrollbar-width: thin;
+}
+
+/* 让固定的极光层从 body 后面透出来 */
+body {
+  background-color: transparent;
+}
+
+/* ==========================================================================
+   2. 极光背景层
+   ========================================================================== */
+.rdg-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 模糊只做一次（放在容器上），比给每个光斑单独模糊省一个数量级的开销 */
+.rdg-aurora__field {
+  position: absolute;
+  inset: 0;
+  filter: blur(var(--rdg-aurora-blur)) saturate(var(--rdg-aurora-saturate));
+}
+
+.rdg-blob {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  opacity: var(--rdg-aurora-opacity);
+  will-change: transform;
+}
+
+.rdg-blob--1 {
+  top: -26vmin;
+  left: -10vmin;
+  width: 86vmin;
+  height: 62vmin;
+  background: radial-gradient(closest-side, var(--rdg-aurora-1), transparent);
+  animation: rdg-drift-a 26s ease-in-out infinite;
+}
+
+.rdg-blob--2 {
+  top: -30vmin;
+  left: 20vmin;
+  width: 78vmin;
+  height: 56vmin;
+  background: radial-gradient(closest-side, var(--rdg-aurora-2), transparent);
+  animation: rdg-drift-b 31s ease-in-out -6s infinite;
+}
+
+.rdg-blob--3 {
+  top: -22vmin;
+  right: -16vmin;
+  width: 74vmin;
+  height: 56vmin;
+  background: radial-gradient(closest-side, var(--rdg-aurora-3), transparent);
+  animation: rdg-drift-c 28s ease-in-out -12s infinite;
+}
+
+.rdg-blob--4 {
+  top: 2vmin;
+  right: 2vmin;
+  width: 66vmin;
+  height: 44vmin;
+  background: radial-gradient(closest-side, var(--rdg-aurora-4), transparent);
+  animation: rdg-drift-b 34s ease-in-out -3s infinite;
+}
+
+.rdg-blob--5 {
+  top: 8vmin;
+  left: -12vmin;
+  width: 58vmin;
+  height: 40vmin;
+  background: radial-gradient(closest-side, var(--rdg-aurora-5), transparent);
+  animation: rdg-drift-c 24s ease-in-out -9s infinite;
+}
+
+.rdg-blob--6 {
+  top: -2vmin;
+  left: 42vmin;
+  width: 52vmin;
+  height: 36vmin;
+  background: radial-gradient(closest-side, var(--rdg-aurora-6), transparent);
+  animation: rdg-drift-a 22s ease-in-out -16s infinite;
+}
+
+/* 白纱：中央留白 + 向下沉淀为底色，是「正文看得清」的关键 */
+.rdg-aurora__veil {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      108% 64% at 50% 30%,
+      rgba(var(--rdg-veil-rgb), 0.84) 0%,
+      rgba(var(--rdg-veil-rgb), 0.6) 40%,
+      rgba(var(--rdg-veil-rgb), 0.2) 72%,
+      rgba(var(--rdg-veil-rgb), 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(var(--rdg-veil-rgb), 0) 0%,
+      rgba(var(--rdg-veil-rgb), 0.05) 26%,
+      rgba(var(--rdg-veil-rgb), 0.34) 50%,
+      rgba(var(--rdg-veil-rgb), 0.72) 64%,
+      var(--rdg-base) 78%,
+      var(--rdg-base) 100%
+    );
+}
+
+/* 极细噪点，避免大面积渐变出现色带（banding） */
+.rdg-aurora__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+@keyframes rdg-drift-a {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4vmin, 3vmin, 0) scale(1.09);
+  }
+  66% {
+    transform: translate3d(-3vmin, 5vmin, 0) scale(0.96);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes rdg-drift-b {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-5vmin, 4vmin, 0) scale(1.12);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes rdg-drift-c {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  40% {
+    transform: translate3d(3vmin, -3vmin, 0) scale(1.06);
+  }
+  70% {
+    transform: translate3d(-4vmin, 2vmin, 0) scale(0.98);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* ==========================================================================
+   3. 导航栏 / 侧边栏 / 移动端局部导航
+   ========================================================================== */
+.VPNavBar:not(.home),
+.VPNavBar.home:not(.top) {
+  -webkit-backdrop-filter: var(--rdg-glass-blur);
+  backdrop-filter: var(--rdg-glass-blur);
+}
+
+/* 用一条渐变发丝线替掉生硬的灰线 */
+.VPNavBar .divider-line {
+  background: var(--rdg-hairline);
+}
+
+.VPNavBarTitle .logo {
+  border-radius: 8px;
+  box-shadow: 0 6px 14px -8px rgba(20, 184, 166, 0.85);
+}
+
+.VPNavBarTitle .title {
+  background-image: var(--rdg-grad-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.VPNavBarMenuLink.VPNavBarMenuLink {
+  border-radius: var(--rdg-radius-pill);
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.VPNavBarMenuLink.VPNavBarMenuLink:hover {
+  background-color: rgba(20, 184, 166, 0.1);
+}
+
+.VPSidebar {
+  -webkit-backdrop-filter: var(--rdg-glass-blur);
+  backdrop-filter: var(--rdg-glass-blur);
+}
+
+.VPSidebarItem .link:hover .text,
+.VPSidebarItem .link .text {
+  transition: color 0.25s;
+}
+
+.VPSidebarItem .link:hover .text {
+  color: var(--vp-c-brand-1);
+}
+
+/* 当前页高亮：加一条小竖线，比纯变色更醒目 */
+.VPSidebarItem.is-active > .item > .indicator,
+.VPSidebarItem.is-link.is-active > .item .link > .indicator {
+  background-color: var(--vp-c-brand-1);
+}
+
+/* ==========================================================================
+   4. 首页 Hero + 按钮
+   ========================================================================== */
+.VPHero .container .name {
+  font-size: clamp(40px, 6.4vw, 66px);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+.VPHero .container .text {
+  font-size: clamp(26px, 3.6vw, 40px);
+  line-height: 1.24;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  background-image: var(--rdg-grad-sub);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.VPHero .container .tagline {
+  padding-top: 14px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--vp-c-text-2);
+}
+
+.VPHero .actions {
+  padding-top: 26px;
+}
+
+.VPHero .actions .VPButton {
+  height: 46px;
+  padding: 0 26px;
+  line-height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--rdg-radius-pill);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease, filter 0.25s ease;
+}
+
+.VPHero .actions .VPButton.brand {
+  background-color: transparent;
+  background-image: var(--rdg-grad-brand);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: var(--rdg-shadow-brand);
+}
+
+.VPHero .actions .VPButton.brand:hover {
+  background-image: var(--rdg-grad-brand);
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px -14px rgba(52, 211, 153, 0.72);
+  filter: brightness(1.05);
+}
+
+.VPHero .actions .VPButton.brand:active {
+  transform: translateY(0);
+}
+
+.VPHero .actions .VPButton.alt {
+  background-color: var(--rdg-glass);
+  border: 1px solid rgba(20, 184, 166, 0.24);
+  color: var(--vp-c-brand-1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.VPHero .actions .VPButton.alt:hover {
+  background-color: var(--rdg-glass-strong);
+  border-color: rgba(20, 184, 166, 0.48);
+  color: var(--vp-c-brand-2);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   5. 首页「光晕图标」（Hero 右侧装饰）
+   ========================================================================== */
+.rdg-orb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.rdg-orb__halo {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(20, 184, 166, 0.42),
+    rgba(52, 211, 153, 0.22) 55%,
+    transparent 78%
+  );
+  filter: blur(34px);
+  animation: rdg-orb-breathe 7.5s ease-in-out infinite;
+}
+
+.rdg-orb__ring {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 1px dashed rgba(20, 184, 166, 0.32);
+  animation: rdg-orb-spin 26s linear infinite;
+}
+
+.rdg-orb__ring--delay {
+  width: 196px;
+  height: 196px;
+  border-style: solid;
+  border-color: rgba(52, 211, 153, 0.22);
+  animation-duration: 18s;
+  animation-direction: reverse;
+}
+
+.rdg-orb__logo {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  border-radius: 30px;
+  box-shadow: 0 24px 48px -20px rgba(15, 118, 110, 0.6);
+  animation: rdg-orb-breathe 7.5s ease-in-out infinite;
+}
+
+@keyframes rdg-orb-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rdg-orb-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.035);
+  }
+}
+
+/* ==========================================================================
+   6. 首页功能卡片
+   ========================================================================== */
+.VPFeatures .VPFeature {
+  border: 1px solid var(--rdg-glass-border);
+  border-radius: var(--rdg-radius-lg);
+  background-color: var(--rdg-glass);
+  -webkit-backdrop-filter: var(--rdg-glass-blur);
+  backdrop-filter: var(--rdg-glass-blur);
+  box-shadow: var(--rdg-shadow-card);
+  transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.32s ease,
+    border-color 0.32s ease, background-color 0.32s ease;
+}
+
+.VPFeatures .VPFeature:hover {
+  transform: translateY(-6px);
+  border-color: rgba(20, 184, 166, 0.36);
+  background-color: var(--rdg-glass-strong);
+  box-shadow: var(--rdg-shadow-card-hover);
+}
+
+.VPFeatures .VPFeature .box {
+  padding: 26px;
+}
+
+.VPFeatures .VPFeature .icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 18px;
+  border-radius: var(--rdg-radius-md);
+  border: 1px solid rgba(20, 184, 166, 0.16);
+  background-color: transparent;
+  background-image: linear-gradient(135deg, rgba(20, 184, 166, 0.16), rgba(52, 211, 153, 0.14));
+  font-size: 22px;
+}
+
+.VPFeatures .VPFeature .title {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.VPFeatures .VPFeature .details {
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.68;
+  color: var(--vp-c-text-2);
+}
+
+.VPFeatures .items {
+  margin: -10px;
+}
+
+.VPFeatures .item {
+  padding: 10px;
+}
+
+.VPHome .VPFeatures {
+  padding-bottom: 56px;
+}
+
+/* ==========================================================================
+   7. 文档页可读性：极光只当氛围，正文区再压一层柔光
+   ========================================================================== */
+.VPContent:not(.is-home) {
+  background-image: linear-gradient(
+    180deg,
+    rgba(var(--rdg-veil-rgb), 0.6) 0%,
+    rgba(var(--rdg-veil-rgb), 0.28) 360px,
+    rgba(var(--rdg-veil-rgb), 0) 720px
+  );
+}
+
+.VPDoc .content-container h2 {
+  border-top: none;
+  padding-top: 28px;
+}
+
+.VPDoc .content-container h2::before {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-bottom: 18px;
+  border-radius: var(--rdg-radius-pill);
+  background-image: var(--rdg-grad-brand);
+  opacity: 0.85;
+}
+
+.VPDoc a {
+  font-weight: 500;
+  text-decoration-color: rgba(20, 184, 166, 0.4);
+  text-underline-offset: 3px;
+}
+
+.VPDoc a:hover {
+  text-decoration-color: var(--vp-c-brand-1);
+}
+
+/* 代码块 / 自定义容器：跟着走圆角 + 玻璃边 */
+.VPDoc div[class*='language-'],
+.VPDoc .custom-block,
+.VPDoc .tip,
+.VPDoc .warning {
+  border-radius: var(--rdg-radius-md);
+}
+
+.VPDocAsideOutline .outline-link.active {
+  color: var(--vp-c-brand-1);
+}
+
+/* ==========================================================================
+   8. 页脚 / 滚动条 / 选区
+   ========================================================================== */
+.Layout .VPFooter {
+  border-top: none;
+  background-color: transparent;
+  padding-top: 36px;
+  padding-bottom: 44px;
+}
+
+.Layout .VPFooter::before {
+  content: '';
+  display: block;
+  height: 1px;
+  margin: 0 auto 22px;
+  max-width: 1152px;
+  background: var(--rdg-hairline);
+}
+
+.Layout .VPFooter .message,
+.Layout .VPFooter .copyright {
+  color: var(--vp-c-text-3);
+  font-size: 13px;
+}
+
+.Layout .VPFooter .message a:hover,
+.Layout .VPFooter .copyright a:hover {
+  color: var(--vp-c-brand-1);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: var(--rdg-radius-pill);
+  background-clip: padding-box;
+  background-color: rgba(20, 184, 166, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(20, 184, 166, 0.5);
+}
+
+::selection {
+  background-color: rgba(20, 184, 166, 0.22);
+}
+
+/* ==========================================================================
+   9. 深色模式：极光改成「深空夜光」
+   ========================================================================== */
+html.dark {
+  --rdg-base: #05161a;
+  --rdg-veil-rgb: 5, 22, 26;
+
+  /* 深色极光：青绿色系的深空夜光 */
+  --rdg-aurora-1: #2dd4bf;
+  --rdg-aurora-2: #38bdf8;
+  --rdg-aurora-3: #34d399;
+  --rdg-aurora-4: #14b8a6;
+  --rdg-aurora-5: #5eead4;
+  --rdg-aurora-6: #6ee7b7;
+  --rdg-aurora-opacity: 0.46;
+  --rdg-aurora-saturate: 140%;
+
+  --rdg-glass: rgba(255, 255, 255, 0.05);
+  --rdg-glass-strong: rgba(255, 255, 255, 0.09);
+  --rdg-glass-border: rgba(255, 255, 255, 0.1);
+
+  --rdg-shadow-card: 0 14px 34px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.02);
+  --rdg-shadow-card-hover: 0 26px 52px -22px rgba(20, 184, 166, 0.55);
+  --rdg-hairline: linear-gradient(90deg, transparent, rgba(94, 234, 212, 0.22), transparent);
+
+  --rdg-grad-title: linear-gradient(118deg, #5eead4 0%, #2dd4bf 46%, #6ee7b7 100%);
+  --rdg-grad-sub: linear-gradient(118deg, #5eead4 0%, #2dd4bf 50%, #34d399 100%);
+
+  --vp-nav-bg-color: rgba(5, 22, 26, 0.72);
+  --vp-local-nav-bg-color: rgba(5, 22, 26, 0.8);
+  --vp-sidebar-bg-color: rgba(8, 26, 30, 0.72);
+}
+
+html.dark .rdg-aurora__field {
+  mix-blend-mode: screen;
+}
+
+html.dark .rdg-aurora__grain {
+  opacity: 0.3;
+}
+
+html.dark .VPHero .actions .VPButton.alt {
+  border-color: rgba(94, 234, 212, 0.28);
+  color: #99f6e4;
+}
+
+html.dark .VPHero .actions .VPButton.alt:hover {
+  border-color: rgba(94, 234, 212, 0.5);
+  color: #fff;
+}
+
+html.dark .VPNavBarMenuLink.VPNavBarMenuLink:hover {
+  background-color: rgba(94, 234, 212, 0.14);
+}
+
+html.dark .rdg-orb__logo {
+  box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.85);
+}
+
+/* ==========================================================================
+  10. 无障碍与动效降级
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .rdg-blob,
+  .rdg-orb__ring,
+  .rdg-orb__halo,
+  .rdg-orb__logo {
+    animation: none !important;
+  }
+
+  .VPFeatures .VPFeature:hover,
+  .VPHero .actions .VPButton:hover {
+    transform: none;
+  }
+}
+
+/* 小屏：光晕图标缩小，别把首屏顶掉 */
+@media (max-width: 959px) {
+  .rdg-orb__halo {
+    width: 200px;
+    height: 200px;
+  }
+
+  .rdg-orb__ring {
+    width: 176px;
+    height: 176px;
+  }
+
+  .rdg-orb__ring--delay {
+    width: 140px;
+    height: 140px;
+  }
+
+  .rdg-orb__logo {
+    width: 104px;
+    height: 104px;
+    border-radius: 24px;
+  }
+}
+
+/* 打印：去掉所有装饰背景 */
+@media print {
+  .rdg-aurora,
+  .rdg-orb {
+    display: none !important;
+  }
+}

@@ -1,0 +1,22 @@
+# ===== 构建产物 =====
+bin/
+obj/
+publish/
+.vs/
+
+# ===== 本机 ffmpeg 产物 =====
+# 注意：tools/ffmpeg.exe.gz 是构建必需的嵌入资源，必须纳入版本控制，不要忽略
+tools/ffmpeg.exe
+tools/*.bak
+
+# ===== IDE / 系统 =====
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
+
+# ===== VitePress 文档站（仅 docs/ 子目录） =====
+docs/node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+docs/.vitepress/*.timestamp-*.mjs
