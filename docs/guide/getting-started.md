@@ -1,11 +1,11 @@
 # 快速开始
 
-**随舞音频生成器（RandomDanceGen）** 是一款 Windows 桌面工具：把一场随机舞蹈要用的歌，从 B站自动下载、按你指定的时间段裁剪、再按顺序拼接成**一个** MP3 或 MP4 —— 直接就能拿去放。
+**随舞音频生成器（RandomDanceGen）** 是一款 Windows 桌面工具：把一场随机舞蹈要用的歌，从 自动下载、按你指定的时间段裁剪、再按顺序拼接成**一个** MP3 或 MP4 —— 直接就能拿去放。
 
 整个流程只有四步：
 
 ::: tip 四步产出成品
-**① B站登录** → **② 准备歌单** → **③ 加载歌单** → **④ 开始生成**
+**① 登录（只使用随机音乐可以不登录）** → **② 准备歌单** → **③ 加载歌单** → **④ 开始生成**
 :::
 
 ![随舞音频生成器主界面](/screenshots/main.jpg)
@@ -21,22 +21,22 @@
 
 ### 下载与首次运行
 
-下载**混淆版**（已做代码混淆，提升反编译难度）：💾 [RandomDanceGen-obfuscated.zip](https://github.com/666QFF/Random-Dance-Music-Generator/releases/latest/download/RandomDanceGen-obfuscated.zip)
+下载**混淆版**：💾 [RandomDanceGen.zip](https://github.com/666QFF/Random-Dance-Music-Generator/releases)
 
 解压后双击 `随机舞蹈音频视频生成器.exe` 即可（自包含，无需安装 .NET）。
 
 首次启动时软件会在后台做两件事，**界面可能先显示为纯色，属正常现象**：
 
-1. **释放内置 ffmpeg** —— 发布版把 ffmpeg 压缩嵌在 exe 里，首次运行解压到 `%LOCALAPPDATA%\RandomDanceGen\tools\`，之后复用（所以第一次启动稍慢）；
+1. **释放内置 ffmpeg** —— 发布版把 ffmpeg 压缩嵌在 exe 里，首次运行启动稍慢；
 2. **联网抓取随机背景动图** —— 主界面背景是随机 ACG 动图，**每次启动都抓一张新的**（约 1~5 秒）。不等它也完全不影响使用。
 
-## 二、B站登录（建议，为了高清）
+## 二、登录（建议，为了高清）
 
-不登录也能用，但 **B站只会返回 480P**；扫码登录后可拿到 **1080P** 源，成品清晰度差别很明显。
+不登录也能用，但 **只会返回 480P**；扫码登录后可拿到 **1080P** 源，成品清晰度差别很明显。
 
-点击右上角 **B站登录**，用 **B站手机 APP** 扫码：
+点击右上角 **登录**，用 **B站手机 APP** 扫码：
 
-![B站扫码登录](/screenshots/bili-login.png)
+![扫码登录](/screenshots/bili-login.png)
 
 登录成功后按钮变为「已登录」，右侧状态栏显示有效期，例如 `● 已登录 · 有效期至 2026-10-01`。
 
@@ -95,7 +95,7 @@ output\随舞视频_20260916_111905.mp4
 | `output\.temp\` | 下载的原片与中间片段（可删，见「清理缓存」） |
 | `assets\` | 内置倒计时素材（`音频倒计时.mp3` / `视频倒计时.mp4`） |
 | `%LOCALAPPDATA%\RandomDanceGen\tools\` | 内置 ffmpeg 的释放位置 |
-| `%LOCALAPPDATA%\RandomDanceGen\` | B站登录凭据等用户数据 |
+| `%LOCALAPPDATA%\RandomDanceGen\` | 登录凭据等用户数据 |
 
 ::: tip 下一步
 - 想调音量 / 歌词 / 曲间效果 → [使用教程](/guide/usage)
