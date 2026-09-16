@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitepress'
 
 // ⚠️ 部署到 GitHub Pages 项目页必须带仓库名前缀：
-//    https://666QFF.github.io/Random-Dance-Music-Generator/
+//    https://666QFF.github.io/RandomDanceGenerator/
 // 若以后换成自定义域名或 666QFF.github.io 根仓库，把这里改成 '/' 即可。
-const BASE = '/Random-Dance-Music-Generator/'
+const BASE = '/RandomDanceGenerator/'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -54,7 +54,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/666QFF/Random-Dance-Music-Generator' },
+      { icon: 'github', link: 'https://github.com/666QFF/RandomDanceGenerator' },
     ],
 
     search: {
@@ -72,7 +72,7 @@ export default defineConfig({
     },
 
     footer: {
-      message: '基于 VitePress 构建 · 二次元活力风',
+      message: '基于 VitePress 构建',
       copyright: 'Copyright © 2026 秋秋 · RandomDanceGen',
     },
 
