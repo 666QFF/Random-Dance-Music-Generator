@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: RandomDanceGen
+  name: RandomDanceMusic-Generator
   text: 随机舞蹈音视频生成器
   tagline: 下载 → 裁剪 → 拼接，一键产出可直接上台的 MP3 / MP4
   actions:
